@@ -99,11 +99,15 @@ end
 # ゲームウィンドウクラス
 class MyGame < Gosu::Window
   def initialize
-    super(800, 600)
+    rows = 8
+    cols = 8
+    @cell_size = 50
+    width = cols * @cell_size
+    height = rows * @cell_size
+    super(width, height)
     self.caption = "Puzzle Game"
 
-    @board = Board.new(8, 8)
-    @cell_size = 50
+    @board = Board.new(rows, cols)
   end
 
   def update
@@ -151,6 +155,12 @@ class MyGame < Gosu::Window
     end
   end
 
+  def draw_background
+    width = @board.cols * @cell_size
+    height = @board.rows * @cell_size
+    Gosu.draw_rect(0, 0, width, height, Gosu::Color::WHITE)
+  end
+
   def draw_cell(x, y, cell)
     x_pos = x * @cell_size
     y_pos = y * @cell_size
@@ -160,6 +170,14 @@ class MyGame < Gosu::Window
 
     if cell.cleared?
       Gosu.draw_rect(x_pos + 10, y_pos + 10, @cell_size - 20, @cell_size - 20, Gosu::Color::BLACK)
+    end
+  end
+  
+  def button_down(id)
+    if id == Gosu::MsLeft
+      x = (mouse_x / @cell_size).to_i
+      y = (mouse_y / @cell_size).to_i
+      select_cell(x, y)
     end
   end
 end
