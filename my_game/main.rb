@@ -86,12 +86,15 @@ class GameWindow < Gosu::Window
   
     if @board.can_swap?(*@selected_cell_origin, x, y)
       @board.swap_cells(*@selected_cell_origin, x, y)
+      @selected_cell.x, @selected_cell.y = x, y
+      @board.get_cell(x, y).x, @board.get_cell(x, y).y = *@selected_cell_origin
       check_matches_and_clear
     end
   
     @selected_cell = nil
     @selected_cell_origin = nil
   end
+  
   
   def update
     if @selected_cell
